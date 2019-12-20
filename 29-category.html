@@ -1,0 +1,51 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="./js/react.development.js"></script>
+    <script src="./js/react-dom.development.js"></script>
+    <script src="./js/babel.js"></script>
+    <script type="text/babel">
+      const rootHandle = document.getElementById("root");
+      class SelectForm extends React.Component {
+          constructor() {
+              super()
+              this.state = {
+                  categories: [
+                      {id: 1, name: 'sports'},
+                      {id: 2, name: 'gardening'},
+                      {id: 3, name: 'grocery'},
+                      {id: 4, name: 'office furniture'},
+                      {id: 5, name: 'collecting stamps'}
+                  ],
+                  selectedCatagory: ''
+              }
+          }
+
+          handleChange=(e)=> {
+            const selectedCatagory = e.target.value
+            this.setState({
+                selectedCatagory
+            })
+          }
+
+          render() {
+              return (
+                  <select value={this.state.selectedCategory} onChange={this.handleChange}>
+                    <option value="">Select</option>
+                    {this.state.categories.map((category)=> {
+                        return <option key = {category.id} value={category.id}>{category.name}</option>
+                    })}
+                    </select>
+              )
+          }
+      }
+      ReactDOM.render(<SelectForm />, rootHandle)
+    </script>
+  </body>
+</html>

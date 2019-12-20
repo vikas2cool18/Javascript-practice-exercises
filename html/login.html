@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id="root">
+
+    </div>
+    <script>
+    const rootHandle = document.getElementById('root')
+    const input = document.createElement('INPUT')
+    input.setAttribute('type', 'text')
+    input.setAttribute('placeholder', 'username')
+    rootHandle.appendChild(input)
+    const password = document.createElement('INPUT')
+    password.setAttribute('type', 'password')
+    const  show = document.createElement('Button')
+    const text = document.createTextNode('Show');
+    show.appendChild(text)
+    rootHandle.appendChild(password)
+    rootHandle.appendChild(show)
+    show.addEventListener('mouseover', function() {
+        password.setAttribute('type', 'text')
+    })
+    show.addEventListener('mouseout', function() {
+        password.setAttribute('type','password')
+    })
+
+
+
+</script>
+</body>
+</html>

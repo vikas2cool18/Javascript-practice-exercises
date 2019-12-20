@@ -1,0 +1,53 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="./js/react.development.js"></script>
+    <script src="./js/react-dom.development.js"></script>
+    <script src="./js/babel.js"></script>
+    <script type="text/babel">
+      const rootHandle = document.getElementById("root");
+     
+      class UserList extends React.Component {
+        constructor() {
+            super()
+          this.state = {
+          users : [
+          {id: 1, name: 'john'},
+          {id:2, name: 'doe'},
+          {id:3, name: 'sam'}
+      ]
+          }
+        }
+
+        removeUser=(id) => {
+            const confirm = windows.confirm("")
+            this.setState((prevState) => {
+                return {
+                    users : prevState.users.filter((user)=> user.id != id)
+                }
+            })
+        }
+        render() {
+            return (
+                <ul>
+                    {this.state.users.map((user) => {
+                        return (<div><li key = {user.id} >{user.name}</li><button onClick={
+                            //define inline functions, when we need to pass, arguments to event handlers
+                            ()=> this.removeUser(user.id)}>remove</button></div> )
+                    })}
+                </ul>
+                
+            )
+        }
+
+      }
+      ReactDOM.render(<UserList />, rootHandle)
+    </script>
+  </body>
+</html>

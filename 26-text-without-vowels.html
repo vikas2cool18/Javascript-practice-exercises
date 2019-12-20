@@ -1,0 +1,48 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="./js/react.development.js"></script>
+    <script src="./js/react-dom.development.js"></script>
+    <script src="./js/babel.js"></script>
+    <script type="text/babel">
+      const rootHandle = document.getElementById("root");
+      class TextWithoutVowels extends React.Component {
+          constructor() {
+              super()
+              this.state={
+                  textwithVowels: '',
+                  textwithoutvowels: ''
+              }
+          }
+
+          handleTextChange=(e)=> {
+              const textwithVowels = e.target.value
+              const vowels = 'aeiouAEIOU'
+              let textwithoutvowels=textwithVowels.split('').filter((char)=> !vowels.includes(char)).join('')
+              
+              this.setState({
+                  textwithVowels,
+                  textwithoutvowels
+              })
+
+          }
+
+          render() {
+              return (
+                  <div>
+                    {this.state.textwithoutvowels.length > 0 ? <p>{this.state.textwithoutvowels}</p> : ''} 
+                  <textarea value={this.state.textwithVowels} onChange={this.handleTextChange} />
+                  </div>
+              )
+          }
+      }
+      ReactDOM.render(<TextWithoutVowels />, rootHandle)
+    </script>
+  </body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script>
+      //   const rootHandle = document.getElementById("root");
+    
+     const url = 'https://jsonplaceholder.typicode.com/users'
+     const xhr = new XMLHttpRequest()
+     xhr.open('GET', url)
+     xhr.send()
+     xhr.onload=function() {
+         users=JSON.parse(xhr.responseText)
+        console.log(users);
+      const rootHandle = document.getElementById("root");
+      const label = document.createElement("label");
+      label.innerHTML = "search";
+      const input = document.createElement("INPUT");
+      input.setAttribute("type", "text");
+      const ulTag = document.createElement('ul')
+      rootHandle.appendChild(label)
+      rootHandle.appendChild(input)
+      rootHandle.appendChild(ulTag)
+      input.addEventListener('keyup', function( ) {
+        ulTag.innerHTML=''
+        const inputVar = input.value;
+        const usersList = users.filter(function(item) {
+            return item.name.toLowerCase().includes(inputVar)
+        })
+        console.log(usersList)
+        usersList.forEach(function(item1) {
+            const liTag = document.createElement('li')
+                liTag.innerHTML = item1.name;
+                ulTag.appendChild(liTag)
+        })
+        
+      })
+    }
+    </script>
+  </body>
+</html>

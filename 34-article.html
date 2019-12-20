@@ -1,0 +1,82 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="./js/react.development.js"></script>
+    <script src="./js/react-dom.development.js"></script>
+    <script src="./js/babel.js"></script>
+    <script type="text/babel">
+      const rootHandle = document.getElementById("root");
+      class FormComponent extends React.Component {
+          constructor() {
+              super()
+              this.state = {
+                  title: '',
+                  body: '',
+                  date: ''
+              }
+          }
+
+          handleChange=(e)=> {
+              this.setState({
+                [e.target.name]: e.target.value
+              })
+              
+          }
+
+        //   handleText=(e)=> {
+        //       const title= e.target.value
+        //     this.setState({
+        //         title
+        //     })
+        //   }
+
+        //   handleBody=(e)=> {
+        //       const body=e.target.value
+        //       this.setState({
+        //           body
+        //       })
+        //   }
+
+        //   handleDate=(e)=> {
+        //       const date=e.target.value
+        //       this.setState({
+        //           date
+        //       })
+        //   }
+
+          handleSubmit=(e)=> {
+            e.preventDefault()
+            const formData = {
+                title: this.state.title,
+                body: this.state.body,
+                date: this.state.date
+            }
+            console.log(formData)
+          }
+
+          render() {
+              return (
+                  <div>
+                    <form onSubmit={this.handleSubmit}>
+                    <label htmlFor="title">title</label>
+                    <input type="text" value={this.state.title} onChange={this.handleChange} name="title" />
+                    <label htmlFor="body">body</label>
+                    <input type="text" value={this.state.body} onChange={this.handleChange} name="body"/>
+                    <label htmlFor="date">date</label>
+                    <input type="date" value={this.state.date} onChange={this.handleChange} name="date"/>
+                    <button>submit</button>
+                </form>
+                </div>
+                )
+          }
+      }
+      ReactDOM.render(<FormComponent />, rootHandle)
+    </script>
+  </body>
+</html>

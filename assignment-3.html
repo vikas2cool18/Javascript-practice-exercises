@@ -1,0 +1,67 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="./js/react.development.js"></script>
+    <script src="./js/react-dom.development.js"></script>
+    <script src="./js/babel.js"></script>
+    <script type="text/babel">
+      const rootHandle = document.getElementById("root");
+      class User extends React.Component {
+          constructor() {
+              super()
+              this.state = {
+                  users : [
+                      {id: 114, name: 'karthik'},
+                      {id: 115, name: 'karun'},
+                      {id: 116, name: 'Gayathri'},
+                      {id: 117, name: 'Deepak'},
+                      {id: 118, name: 'Pandiaraj'}
+                  ]
+              }
+          }
+          handleRemove = (name) => {
+              console.log(name)
+            const removedName = prompt("please enter the name")
+            if(name==removedName) {
+                this.setState((prevState)=> {
+                    return {
+                        users: prevState.users.filter((user)=> {
+                            return user.name!=removedName
+                        })
+                    }
+                })
+            } else {
+                alert("The names are not equal")
+            }
+          }
+
+          render() {
+              return (
+                  <div>
+                    <h1>Listing User Detail</h1>
+                    <table border="1">
+                <tr>
+                    <th>id</th>
+                    <th>name</th>
+                    <th>email</th>
+                    </tr>
+                   
+                        {this.state.users.map((user)=> {
+                            return <tr key = {user.id}><td>{user.id}</td><td>{user.name}</td><td><button onClick = {()=> {this.handleRemove(user.name)}}>RemoveUser</button></td></tr>
+                        })}
+                       
+                </table>
+                    </div>
+              )
+          }
+      }
+      ReactDOM.render(<User />, rootHandle)
+    </script>
+  </body>
+</html>

@@ -1,0 +1,56 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="./js/react.development.js"></script>
+    <script src="./js/react-dom.development.js"></script>
+    <script src="./js/babel.js"></script>
+    <script type="text/babel">
+      const rootHandle = document.getElementById("root");
+      class RandomNumberGenerator extends React.Component {
+          constructor() {
+              super()
+              this.state = {
+                  number : '',
+                  histNumber : []             }
+          }
+
+          generateRandomNumber = () => {
+              const number = Math.round(Math.random()*50)*2
+            this.setState((prevState)=>  { 
+                return {
+                number : number, 
+                // add to the end
+               // histNumber : prevState.histNumber.concat(number)
+               // add to the beginning
+               //es5
+               //histNumber: [].concat(number, prevState.histNumber)
+               //es6
+               histNumber: [number, ...prevState.histNumber]
+            }
+          })
+        }
+
+          render() {
+              return (
+                  <div>
+                        <h2>{this.state.number}</h2>
+                        <button onClick = {this.generateRandomNumber}>generate</button>
+                        <ul>
+                            {this.state.histNumber.map(function(num) {
+                                return <li>{num}</li>
+                            })}
+                            </ul>
+                    </div>
+                )
+          }
+      }
+      ReactDOM.render(<RandomNumberGenerator />, rootHandle)
+    </script>
+  </body>
+</html>

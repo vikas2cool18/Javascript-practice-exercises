@@ -1,0 +1,47 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="./js/react.development.js"></script>
+    <script src="./js/react-dom.development.js"></script>
+    <script src="./js/babel.js"></script>
+    <script type="text/babel">
+      const rootHandle = document.getElementById("root");
+      class SelectForm extends React.Component {
+          constructor() {
+              super()
+              this.state={
+                  enq:''
+              }
+          }
+
+          handleChange=(e)=> {
+              const enq=e.target.value
+              console.log(enq)
+            this.setState({
+                enq
+            })
+          }
+
+          render() {
+              return (
+                <div>
+                <label htmlFor="enqType">Select Type</label>
+                <select value={this.state.enq} onChange={this.handleChange}>
+                    <option value="">Select</option>
+                    <option value="studentV">Student</option>
+                    <option value="fresherV">Fresher</option>
+                </select>
+                </div>
+              )
+          }
+      }
+      ReactDOM.render(<SelectForm />, rootHandle)
+    </script>
+  </body>
+</html>

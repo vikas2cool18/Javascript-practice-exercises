@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="root">
+
+    </div>
+    <script>
+        const rootHandle = document.getElementById("root");
+        let users=[]
+     const url = 'https://jsonplaceholder.typicode.com/users'
+     const xhr = new XMLHttpRequest()
+     xhr.open('GET', url)
+     xhr.send()
+     xhr.onload=function() {
+         users=JSON.parse(xhr.responseText)
+         console.log(users)
+         const selectList=document.createElement("select")
+     selectList.id='names';
+     rootHandle.appendChild(selectList)
+     const pTagName = document.createElement('p')
+     const pTagEmail = document.createElement('p')
+     users.forEach(function(user) {
+      /*  pTagName.innerHTML=''
+       pTagEmail.innerHTML='' */
+         let option = document.createElement('option')
+         option.value=user.name
+         option.text=user.name
+         selectList.appendChild(option)
+         selectList.addEventListener('change', function() {
+             const selectedIndex = selectList.selectedIndex;
+             const optionValue = selectList.options;
+             console.log(optionValue[selectedIndex].text)
+           if(user.name==optionValue[selectedIndex].text) {
+            /* const selection = document.createTextNode(user.name)
+            const email = document.createTextNode(user.email) */
+            pTagName.innerHTML=user.name;
+            pTagEmail.innerHTML=user.email
+            rootHandle.appendChild(pTagName)
+            rootHandle.appendChild(pTagEmail)
+           }
+         })
+     })
+     }
+    
+     
+    </script>
+  </body>
+</html>

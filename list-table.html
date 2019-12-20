@@ -1,0 +1,79 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="./js/react.development.js"></script>
+    <script src="./js/react-dom.development.js"></script>
+    <script src="./js/babel.js"></script>
+    <script type="text/babel">
+      const rootHandle = document.getElementById("root");
+      class ListTable extends React.Component {
+          constructor() {
+              super()
+              this.state = {
+                users : [
+          {id: 1, name: 'john', email: 'john@gmail.com'},
+          {id:2, name: 'doe', email: 'doe@gmail.com'},
+          {id:3, name: 'sam', email: 'sam@gmail.com'}
+      ],
+                  component : 'list'
+              }
+          }
+
+          handleList = () => {
+              this.setState({
+                component: 'list'
+              })
+          }
+
+          handleTable = () => {
+              this.setState({
+                component: 'table'
+              })
+          }
+
+          handleEvent=(e)=> {
+              this.setState({
+                  component: e.target.value
+              })
+          }
+
+          render() {
+              const ulElement = <ul>
+                            {this.state.users.map(function(user) {
+                                return <li>{user.id} - {user.name} - {user.email}</li>
+                            })}
+                            </ul>
+            const tableElement = <table border="1">
+                <tr>
+                    <th>id</th>
+                    <th>name</th>
+                    <th>email</th>
+                    </tr>
+                   
+                        {this.state.users.map(function(user) {
+                            return <tr><td>{user.id}</td><td>{user.name}</td><td>{user.email}</td></tr>
+                        })}
+                       
+                </table>
+              return (
+                  <div>
+                    <form>
+                <input type="radio" name="list" id="list" value="list" onClick={this.handleEvent} checked={this.state.component=='list'} />
+                <label for="example1">List</label>
+                <input type="radio" name="table" id="table" value="table" onClick={this.handleEvent} checked={this.state.component=='table'} />
+                <label for="example1">Table</label> 
+            </form> 
+                {this.state.component== 'list' ? ulElement : tableElement}
+            </div>
+              )          }
+      }
+      ReactDOM.render(<ListTable />, rootHandle)
+    </script>
+  </body>
+</html>

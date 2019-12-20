@@ -1,0 +1,70 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="./js/react.development.js"></script>
+    <script src="./js/react-dom.development.js"></script>
+    <script src="./js/babel.js"></script>
+    <script src="./js/axios.js"></script>
+    <script type="text/babel">
+      const rootHandle = document.getElementById("root");
+      class UserById extends React.Component {
+          constructor() {
+              super()
+              this.state = {
+                  user: {},
+                  id: ''
+              }
+          }
+
+    handleChange=(e)=> {
+        const id=e.target.value
+        this.setState({
+            id
+        })
+    }
+
+    handleSubmit=(e)=> {
+        e.preventDefault()
+        const id = this.state.id
+        console.log(id)
+        axios.get('http://jsonplaceholder.typicode.com/users/' + id)
+        .then((response)=> {
+            const user = response.data;
+            console.log(user)
+            this.setState({
+                user
+            })
+        })
+        .catch((err)=> {
+            this.setState({
+                user: {}
+            })
+            alert(err)
+        })
+    }
+
+          render() {
+              return (
+                  <div>
+                  <form onSubmit={this.handleSubmit}>
+                  <h2>Get User Info</h2>
+                  <input type="text" value={this.state.id} onChange={this.handleChange}/>
+                  <button>submit</button>
+                </form>
+                <h2>User Details</h2>
+                {this.state.user ? <p>{this.state.user.id} - {this.state.user.name} - {this.state.user.email} - 
+                {Object.keys(this.state.user).length==0 ? '' : this.state.user.address.city}</p> : ''}
+            </div>
+              )
+          }
+      }
+      ReactDOM.render(<UserById />, rootHandle)
+    </script>
+  </body>
+</html>

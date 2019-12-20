@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="root">
+
+    </div>
+    <div id="history">
+
+    </div>
+    <script>
+        const rootHandle = document.getElementById("root");
+        const historyHandle = document.getElementById('history')
+     const url = 'https://free.currconv.com/api/v7/convert?q=USD_INR&compact=ultra&apiKey=d24d21539ee5ba660ad7'
+     const xhr = new XMLHttpRequest()
+     xhr.open('GET', url)
+     xhr.send()
+     xhr.onload=function() {
+         const inr=JSON.parse(xhr.responseText)
+         console.log(inr)
+       
+    
+    const slider = document.createElement('input')
+    slider.setAttribute('type', 'range')
+    slider.setAttribute('min','1')
+    slider.setAttribute('max', '10')
+    slider.setAttribute('value', '1')
+    const pTag = document.createElement('p')
+    const pTagValue = document.createElement('p')
+    const pDollar = document.createElement('p')
+    
+    const pHistory2 = document.createElement('li')
+    pDollar.innerHTML=JSON.stringify(inr)
+    rootHandle.appendChild(pDollar)
+    rootHandle.appendChild(slider)
+    rootHandle.appendChild(pTag)
+    rootHandle.appendChild(pTagValue)
+    const obj={};
+    const arrObj = []
+    const historyData = localStorage.getItem('dollarconversion') ? JSON.parse(localStorage.getItem('dollarconversion')) : []
+    const displayStr = ""
+    historyData.forEach(function(hist) {
+      for(const key in hist) {
+        const pHistory1 = document.createElement('ul')
+        pHistory1.innerHTML=key
+        historyHandle.appendChild(pHistory1)
+        hist[key].split(',').forEach(function(item) {
+          const liTag = document.createElement('li')
+          liTag.innerHTML=item
+          pHistory1.appendChild(liTag)
+        })
+      }
+    })
+    slider.addEventListener('change', function() {
+      pTag.innerHTML=(parseInt(slider.value)*parseFloat(inr.USD_INR)).toFixed(2)
+      const dollarValue = (parseInt(slider.value)*parseFloat(inr.USD_INR)).toFixed(2)
+      pTagValue.innerHTML=slider.value
+      const sliderValue = slider.value;
+      const date = new Date()
+      const day = date.getDate();
+      const monthIndex = date.getMonth() + 1;
+      const year = date.getFullYear();
+      const data = localStorage.getItem('dollarconversion') ? JSON.parse(localStorage.getItem('dollarconversion')) : []
+      const dateStr = `${day} - ${monthIndex} - ${year}`
+       obj[dateStr] = `${sliderValue}USD-${dollarValue}`
+       let isExists = false;
+      if(data.length>0) {
+        localStorage.removeItem('dollarconversion')
+        data.forEach(function(item) {
+          for(const key in item) {
+            if(key==dateStr) { item[key] += `,${sliderValue}USD-${dollarValue}`
+            isExists=true
+            }
+          }
+        })
+        if(!isExists) {
+          data.push(obj)
+        }
+        localStorage.setItem('dollarconversion', JSON.stringify(data))
+      } else {
+        arrObj.push(obj)
+        localStorage.setItem('dollarconversion', JSON.stringify(arrObj))
+      }
+      
+        
+              
+    })
+
+  }
+    </script>
+  </body>
+</html>

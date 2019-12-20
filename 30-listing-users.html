@@ -1,0 +1,76 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="./js/react.development.js"></script>
+    <script src="./js/react-dom.development.js"></script>
+    <script src="./js/babel.js"></script>
+    <script type="text/babel">
+      const rootHandle = document.getElementById("root");
+      class UsersList extends React.Component {
+          constructor(){
+              super()
+              this.state ={
+                  users: [
+                      {id:1, name: "user1"},
+                      {id:2, name: "user2"},
+                      {id:3, name: "user3"},
+                      {id:4, name: "user4"}
+                  ],
+                  checkedUsers: []
+              }
+          }
+
+          HandleClick=(e)=> {
+              const name = e.target.value
+              let checkedUsers
+            this.setState((prevState)=> {
+                
+                if(prevState.checkedUsers.includes(name)) {
+                    checkedUsers = prevState.checkedUsers.filter((username)=> {
+                        return username != name
+                    })
+                } else {
+                    checkedUsers=[...prevState.checkedUsers, name]
+                }
+                return {
+                    checkedUsers
+                }
+            })
+
+          }
+
+
+          render() {
+              return (
+                <div>
+                    <table border="1">
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>action</th>
+                            </tr>
+                            
+                            {this.state.users.map((user)=> {
+                                return <tr><td>{user.id}</td><td>{user.name}</td><td><input type="checkbox" value={user.name} onChange={this.HandleClick}/></td></tr>
+                            })}
+                            <ul>
+                                {this.state.checkedUsers.map((username)=> {
+                                    return <li>{username}</li>
+                                })}
+                                </ul>
+                        
+                        </table>
+                    </div>
+              )
+          }
+      }
+      ReactDOM.render(<UsersList />, rootHandle)
+    </script>
+  </body>
+</html>

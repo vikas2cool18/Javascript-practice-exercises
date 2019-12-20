@@ -1,0 +1,57 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="./js/react.development.js"></script>
+    <script src="./js/react-dom.development.js"></script>
+    <script src="./js/babel.js"></script>
+    <script type="text/babel">
+      const rootHandle = document.getElementById("root");
+      class TaskList extends React.Component {
+          constructor() {
+              super()
+              this.state = {
+                  tasks: [
+                      {id:1, name : 'get the website live', isChecked:false},
+                      {id:2, name: 'work on user validation', isChecked:false},
+                      {id:3, name: 'Automate the deployment process', isChecked:false}
+              ]
+              }
+          }
+
+          handleClick=(e)=> {
+            const taskid=e.target.value
+            console.log(taskid)
+            const tasks=[]
+            this.state.tasks.forEach((task)=> {
+                if(task.id==taskid) {
+                    task.isChecked ? task.isChecked=false : task.isChecked=true                    
+                }
+                tasks.push(task)
+            })
+            
+            this.setState({
+                tasks
+            })
+
+          }
+
+
+          render() {
+              return (
+                  this.state.tasks.map((task)=> {
+                    return task.isChecked==false ? <p key={task.id}><input type="checkbox" value={task.id} onChange={this.handleClick} checked={task.isChecked}/>{task.name}</p> : <del><p key={task.id}><input type="checkbox" value={task.id} checked={true} onChange={this.handleClick}/>{task.name}</p></del>
+                  })
+
+              )
+          }
+      }
+      ReactDOM.render(<TaskList />, rootHandle)
+    </script>
+  </body>
+</html>

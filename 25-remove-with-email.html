@@ -1,0 +1,75 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="./js/react.development.js"></script>
+    <script src="./js/react-dom.development.js"></script>
+    <script src="./js/babel.js"></script>
+    <script type="text/babel">
+      const rootHandle = document.getElementById("root");
+      class Users extends React.Component {
+          constructor() {
+              super()
+              this.state = {
+                users : [
+          {id: 1, name: 'john', email: 'john@gmail.com'},
+          {id:2, name: 'doe', email: 'doe@gmail.com'},
+          {id:3, name: 'sam', email: 'sam@gmail.com'},
+          {id:4, name: 'ozzy', email: 'ozzy@gmail.com'},
+          {id:3, name: 'samburger', email: 'samburger@gmail.com'}
+      ],
+      email: ''
+              }
+          }
+
+          handleEmailChange=(e)=> {
+            const email = e.target.value
+            this.setState({
+                email
+            })
+          }
+
+          handleSubmit=(e)=> {
+              e.preventDefault()
+              const email = this.state.email
+              this.setState((prevState)=> {
+                  
+                  return {
+                      users : prevState.users.filter((user)=> {
+                  return user.email != email
+              })
+                  }
+              })
+          }
+
+          render() {
+              return (
+                <div>
+                <table border="1">
+                <tr>
+                <th>#</th>
+                <th>name</th>
+                <th>email</th>
+                </tr>
+                {this.state.users.map((user)=> {
+                    return <tr><td>{user.id}</td><td>{user.name}</td><td>{user.email}</td></tr>
+                })}
+                </table>
+                <h2>Form</h2>
+                <form onSubmit={this.handleSubmit}>
+                <input type="text" name="email" id="email" value={this.state.email} onChange={this.handleEmailChange} />
+                <button>submit</button>
+                </form>
+                </div>
+              )
+          }
+      }
+      ReactDOM.render(<Users />, rootHandle)
+    </script>
+  </body>
+</html>

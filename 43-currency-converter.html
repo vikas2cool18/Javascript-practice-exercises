@@ -1,0 +1,67 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="./js/react.development.js"></script>
+    <script src="./js/react-dom.development.js"></script>
+    <script src="./js/babel.js"></script>
+    <script src="./js/axios.js"></script>
+    <script type="text/babel">
+      const rootHandle = document.getElementById("root");
+      class CurrencyConverter extends React.Component {
+          constructor() {
+              super()
+              this.state = {
+                  inr: 0,
+                  usd: 0,
+                  usdtoinr : 0
+              }
+          }
+
+    componentDidMount=()=> {
+        axios.get('https://free.currconv.com/api/v7/convert?q=USD_INR&compact=ultra&apiKey=d24d21539ee5ba660ad7')
+        .then((response)=> {
+            const data=response.data;
+            const usdtoinr = data.USD_INR
+            console.log(data)
+            this.setState({
+                usdtoinr
+            })
+        })
+        .catch((err)=> {
+            this.setState({
+                inr:0,
+                usd:0
+            })
+            alert(err)
+        })
+    }
+
+    HandleRangeChange=(e)=> {
+        const usd = e.target.value
+        const inr = (usd*this.state.usdtoinr).toFixed(2)
+        this.setState({
+            usd,
+            inr
+        })
+    }
+
+          render() {
+              return (
+                <div>
+                  <h1>Currency Converter</h1>
+                  <h2>INR - {this.state.inr}</h2>
+                  <h2>USD - {this.state.usd}</h2>
+                  <input type="range" name="usdtoinr" min="1" max="100" value={this.state.usd} onChange={this.HandleRangeChange} /> 
+                </div>
+              )
+          }
+      }
+      ReactDOM.render(<CurrencyConverter />, rootHandle)
+    </script>
+  </bod

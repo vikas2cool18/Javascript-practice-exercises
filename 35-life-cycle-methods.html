@@ -1,0 +1,68 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="./js/react.development.js"></script>
+    <script src="./js/react-dom.development.js"></script>
+    <script src="./js/babel.js"></script>
+    <script type="text/babel">
+      const rootHandle = document.getElementById("root");
+      class CountComponent extends React.Component {
+          constructor() {
+              console.log("constructor is called")
+              super()
+              this.state = {
+                  users: [],
+                  isLoading: true
+              }
+          }
+
+          componentDidMount() {
+              console.log('component did mount')
+            //   const xhr = new XMLHttpRequest()
+            //   xhr.open('GET', 'http://jsonplaceholder.typicode.com/users')
+            //   xhr.send()
+            //   xhr.onload=()=> {
+            //       const users = JSON.parse(xhr.responseText)
+            //       this.setState({users})
+            //   }
+            fetch('http://jsonplaceholder.typicode.com/users')
+            .then((response)=> {
+                return response.json()
+            })
+            .then((users)=> {
+                this.setState({users, isLoading: false})
+            })
+            .catch((err)=> {
+                alert(err)
+            })
+          }
+
+          render() {
+              console.log("Render is called")
+              return (
+                  <div>                    
+                    <h2>Listing Users -</h2>
+                    
+                        {this.state.isLoading ? <p>isLoading</p> : (
+                            <ul>
+                            {this.state.users.map((user)=> {
+                        return <li>{user.name}</li>
+                    })}
+                </ul>
+
+                        )} 
+                    
+                    </div>
+              )
+          }
+      }
+      ReactDOM.render(<CountComponent />, rootHandle)
+    </script>
+  </body>
+</html>

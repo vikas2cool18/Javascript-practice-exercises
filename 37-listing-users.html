@@ -1,0 +1,67 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="./js/react.development.js"></script>
+    <script src="./js/react-dom.development.js"></script>
+    <script src="./js/babel.js"></script>
+    <script src="./js/axios.js"></script>
+    <script type="text/babel">
+      const rootHandle = document.getElementById("root");
+      class UsersList extends React.Component {
+          constructor() {
+              super()
+              this.state = {
+                  users: []
+              }
+          }
+
+          componentDidMount() {
+              axios.get('http://jsonplaceholder.typicode.com/users')
+              .then((response)=> {
+                const users=response.data;
+                console.log(users)
+                this.setState({
+                    users
+                })
+              })
+              .catch((err)=> {
+                  alert(err)
+              })
+          }
+
+          render() {
+              return (
+                    <table border="1">
+                        <tr>
+                            <th>#</th>
+                            <th>name</th>
+                            <th>username</th>
+                            <th>email</th>
+                            <th>city</th>
+                            <th>company</th>
+                            </tr>
+                            {this.state.users.map((user)=> {
+                                return (
+                                    <tr>
+                                        <td>{user.id}</td>
+                                        <td>{user.name}</td>
+                                        <td>{user.username}</td>
+                                        <td>{user.email}</td>
+                                        <td>{user.address.city}</td>
+                                        <td>{user.company.name}</td></tr>
+                                )
+                            })}
+                        </table>
+              )
+          }
+      }
+      ReactDOM.render(<UsersList />, rootHandle)
+    </script>
+  </body>
+</html>

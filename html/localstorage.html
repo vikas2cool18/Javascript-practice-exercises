@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script>
+        const rootHandle = document.getElementById('root')
+      const show = document.createElement("Button");
+      const text = document.createTextNode("Show");
+      show.appendChild(text);
+      const input = document.createElement('INPUT')
+        input.setAttribute('type', 'text')
+      show.addEventListener('click', function() {
+          const item = prompt("Enter the item")
+          localStorage.setItem('item', item)
+          input.value=localStorage.getItem('item')
+      })
+      
+      //  input.setAttribute('value', )
+      if(null != localStorage.getItem('item')) {
+        input.value=localStorage.getItem('item')
+      }
+        rootHandle.appendChild(show);
+        rootHandle.appendChild(input)
+
+    </script>
+  </body>
+</html>

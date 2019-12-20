@@ -1,0 +1,50 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="./js/react.development.js"></script>
+    <script src="./js/react-dom.development.js"></script>
+    <script src="./js/babel.js"></script>
+    <script type="text/babel">
+      const rootHandle = document.getElementById("root");
+      class Users extends React.Component {
+          constructor() {
+              super()
+              this.state = {
+                users : ['vikas', 'bharthi', 'vinita', 'vibhas', 'anirudh']
+              }
+          }
+
+removeName=()=> {
+    this.setState((prevState) => {
+        const arr = [...prevState.users]
+        arr.splice(Math.floor(Math.random()*(prevState.users.length)), 1)
+        return {
+            users : arr
+        }
+    })
+}
+
+          render() {
+              return (
+                  <div>
+                  <table border="1">
+                    {this.state.users.map((user)=> {
+                        return <tr><td>{user}</td></tr>
+                    })}
+                    </table>
+                    <button onClick={this.removeName}>Remove</button>
+                </div>
+              )
+          }
+
+      }
+      ReactDOM.render(<Users />, rootHandle)
+    </script>
+  </body>
+</html>

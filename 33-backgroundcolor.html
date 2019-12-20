@@ -1,0 +1,51 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="./js/react.development.js"></script>
+    <script src="./js/react-dom.development.js"></script>
+    <script src="./js/babel.js"></script>
+    <script type="text/babel">
+      const rootHandle = document.getElementById("root");
+      class DisplayDropDown extends React.Component {
+          constructor() {
+              super()
+              this.state={
+                colors: [
+                      "red", "blue", "green", "yellow"
+                  ],
+                  selectedCatagory: ''
+              }
+          }
+
+          handleChange=(e)=> {
+              const selectedCatagory = e.target.value
+            this.setState({
+                selectedCatagory
+            })
+          }
+
+          render() {
+              return (
+                  <div>
+                  <select value={this.selectedCatagory} onChange={this.handleChange}>
+                    <option value="white">Select</option>
+                    {this.state.colors.map((color)=> {
+                        return <option value={color}>{color}</option>
+                    })}
+                    </select>
+                    {document.body.style.background = this.state.selectedCatagory}                    
+                </div>
+                
+              )
+          }
+      }
+      ReactDOM.render(<DisplayDropDown />, rootHandle)
+    </script>
+  </body>
+</html>

@@ -1,0 +1,47 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="./js/react.development.js"></script>
+    <script src="./js/react-dom.development.js"></script>
+    <script src="./js/babel.js"></script>
+    <script src="./js/axios.js"></script>
+    <script type="text/babel">
+      const rootHandle = document.getElementById("root");
+      class DistanceCalculator extends React.Component {
+          constructor() {
+              super()
+              this.state = {
+                  kms: 0,
+                  miles: 0.00
+              }
+          }
+
+          HandleRangeChange=(e)=> {
+              const kms = e.target.value
+              const miles = (kms*1.6).toFixed(2)
+              this.setState({
+                  kms,
+                  miles
+              })
+          }
+
+          render() {
+              return (
+                  <div>
+                  <h1>Distance Calculator</h1>
+                  <h2>KMS - {this.state.kms}</h2>
+                  <h2>Miles - {this.state.miles}</h2>
+                  <input type="range" name="distance" min="0" max="100" value={this.state.kms} onChange={this.HandleRangeChange} /> 
+                </div>
+              )
+          }
+      }
+      ReactDOM.render(<DistanceCalculator />, rootHandle)
+    </script>
+  </bod
