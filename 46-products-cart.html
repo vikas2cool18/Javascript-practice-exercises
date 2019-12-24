@@ -1,0 +1,194 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="./js/react.development.js"></script>
+    <script src="./js/react-dom.development.js"></script>
+    <script src="./js/babel.js"></script>
+    <script src="./js/axios.js"></script>
+    <script type="text/babel">
+      const rootHandle = document.getElementById("root");
+        class App extends React.Component {
+            constructor() {
+                super()
+                this.state={
+                    products : [
+                      {id: 1, name: 'marker', price:10},
+                      {id: 2, name:'scale', price:5}
+                  ],
+                  cart : []
+                }
+            }
+
+            addCount=(product)=> {
+                console.log(product.id)
+                let isExists= false
+                const cartItem=this.state.cart.find((item)=> {
+                    return product.id==item.id
+                })
+               
+                    
+                        let cart = this.state.cart
+                        if(cartItem) {
+                        console.log("i exist", cart)
+                        cart.forEach((item)=> {
+                            console.log("item:",item)
+                            if(item.id==product.id) {
+                                item.quantity+=1
+                                item.total=item.price * item.quantity
+                                isExists=true
+                                console.log("updated cart",cart)
+                            }
+                        })
+                           
+                        }
+                    
+                        if(!isExists) {
+                            var newCartItem = {
+                                id: product.id,
+                                name: product.name,
+                                price: product.price,
+                                quantity: 1,
+                                total: product.price
+                            }
+                            cart=[...cart,newCartItem]
+                            console.log("new cart",cart)
+                        }
+                       this.setState({
+                           cart
+                       })
+                   
+                
+                
+            }
+
+            incrementQuantity=(id)=> {
+                const cart=this.state.cart;
+                cart.forEach((product)=> {
+                    if(product.id==id) {
+                        product.quantity+=1
+                        product.total=product.quantity*product.price
+                    }
+                })
+                console.log("increment quantity",cart)
+                this.setState({
+                    cart
+                })
+
+            }
+
+            decrementQuantity=(id)=> {
+                let cart=this.state.cart;
+                let isProductExists=false
+                cart.forEach((product, index)=> {
+                   if(product.id==id && product.quantity != 0) {
+                        product.quantity-=1
+                        if(product.quantity==0) {
+                            cart.splice(index, 1)
+                        }
+                        product.total=product.quantity*product.price
+                    }                     
+                    
+                })
+                console.log("decreement quantity",cart)
+                this.setState({
+                    cart
+                })
+            }
+
+            render() {
+                return (
+                    <div>
+                    <Products products={this.state.products} addCount={this.addCount}/>
+                    <Cart cart={this.state.cart} incrementQuantity={this.incrementQuantity} decrementQuantity={this.decrementQuantity}/>
+                </div>
+                )
+            }
+        }
+
+      function Products(props) {
+        return (
+            <div>
+                  <h1>Listing Products - {props.products.length}</h1>
+                  <table>
+                  <thead>
+                  <tr>
+                  <th>#</th>
+                  <th>name</th>
+                  <th>price</th>
+                  <th>Action</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  {props.products.map((product)=> {
+                     return ( 
+                         <tr key={product.id}>
+                      <td>{product.id}</td>
+                      <td>{product.name}</td>
+                      <td>{product.price}</td>
+                      <td><button onClick={()=> {
+                          props.addCount(product)
+                      }}>Add</button></td>
+                      </tr>
+                      )
+                  })}
+                  </tbody>
+                  </table>
+                </div>
+              )
+      }
+      class Cart extends React.Component {
+          constructor() {
+              super()
+          }
+
+          render() {
+              console.log("from cart", this.props.cart)
+              let total=0
+              this.props.cart.forEach((item)=> {
+                total+=item.total
+              })
+              return (
+                  <div>
+                  <h1>Order Items - {this.props.cart.length}</h1>
+                  <table>
+                  <thead>
+                  <tr>
+                  <th>#</th>
+                  <th>name</th>
+                  <th>price</th>
+                  <th>Quantity</th>
+                  <th>Total</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  {this.props.cart.map((item)=> {
+                      return ( 
+                          <tr key={item.id}>
+                      <td>{item.id}</td>
+                      <td>{item.name}</td>
+                      <td>{item.price}</td>
+                      <td><button onClick={()=> {
+                          this.props.decrementQuantity(item.id)}}>-</button>{item.quantity}<button onClick={()=> {
+                              this.props.incrementQuantity(item.id)}}>+</button></td>
+                      <td>{item.total}</td>
+                      </tr>
+                      )     
+                  })}
+                  </tbody>
+                  </table>
+                  <p>Total -{total}</p>
+                  </div>
+              )
+          }
+      }
+
+      ReactDOM.render(<App />, rootHandle)
+    </script>
+  </body>
+</html>

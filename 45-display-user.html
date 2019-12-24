@@ -1,0 +1,89 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="./js/react.development.js"></script>
+    <script src="./js/react-dom.development.js"></script>
+    <script src="./js/babel.js"></script>
+    <script src="./js/axios.js"></script>
+    <script type="text/babel">
+      const rootHandle = document.getElementById("root");
+      class App extends React.Component {
+          constructor() {
+              super()
+              this.state= {
+                  user : {}
+              }
+          }
+
+          handleUser=(user)=> {
+              this.setState({
+                  user
+              })
+          }
+
+          render() {
+              return (
+                  <div>
+                  <FindUser handleUser={this.handleUser}/>
+                  <DisplayUser user={this.state.user} />
+                  </div>
+              )
+          }
+
+      }
+      class FindUser extends React.Component {
+          constructor() {
+              super()
+              this.state = {
+                  id: ''
+              }
+          }
+
+          handleChange=(e)=> {
+              const id=e.target.value
+            this.setState({
+                id
+            })
+          }
+
+          handleSubmit=(e)=> {
+            e.preventDefault()
+            axios.get(`https://jsonplaceholder.typicode.com/users/${this.state.id}`)
+            .then((response)=> {
+                const user=response.data
+                this.props.handleUser(user)
+            })
+            .catch((err)=> {
+               this.setState({
+                   id: {}
+               })
+                alert(err)
+            })
+          }
+
+          render() {
+              return (
+                  <div>
+                  <form onSubmit={this.handleSubmit}>
+                  <input type="text" value={this.state.id} onChange={this.handleChange} />
+                  <button>Submit</button>
+                  </form>
+                  </div>
+              )
+          }
+      }
+      function DisplayUser(props) {
+          return (
+              <p>{props.user.name} - {props.user.username} - {props.user.email} - {Object.keys(props.user).length > 0 ? props.user.address.city : ''}</p>
+          )
+      }
+      ReactDOM.render(<App />, rootHandle)
+    </script>
+  </body>
+</html>
