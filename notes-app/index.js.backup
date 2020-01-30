@@ -1,0 +1,222 @@
+const express = require('express')
+const mongoose =  require('mongoose')
+const app=express()
+const PORT = 3033
+app.use(express.json())
+//DB Configuration
+//establish data connection
+//a-install mongoose
+// require mongoose
+mongoose.connect('mongodb://localhost:27017/oct-weekend-notes-app' , {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+})
+.then(()=> {
+    console.log('connected to db')
+})
+.catch((error)=> {
+    console.log(error)
+})
+
+//creating schema
+const Schema = mongoose.Schema
+const noteSchema= new Schema({
+    title: {
+        type: String,
+        required: true
+    },
+    body: {
+        type: String,
+        required: true
+    },
+    createdAT: {
+        type: Date,
+        default: Date.now(),
+        required: true
+    },
+    category: {
+        type: Schema.Types.ObjectId,
+        required: true,
+        ref: 'Category'
+    }
+})
+
+const categorySchema = new Schema({
+    name: {
+        type: String,
+        required: true
+    }
+})
+
+//creating Note model
+
+const Note = mongoose.model('Note', noteSchema)
+const Category = mongoose.model('Category', categorySchema)
+
+// ODM-object Document Mapping
+//1) Helps map a model to collection
+//2) map a object to a document
+//3) map a property to a document's field
+
+//ORM- Object Relational Mapper
+//1) map a model to a table
+//2) map an object to a row
+//3) map a property to a document's field
+
+//
+
+app.post('/notes', (req, res)=> {
+    const body =req.body
+    const note = new Note(body)
+    note.save()
+    .then((note)=> {
+        res.json(note)
+    })
+    .catch((error)=> {
+        res.json(error)
+    })
+})
+
+app.get('/', (req, res)=> {
+    res.json({text : 'welcome to the website'})
+})
+
+app.get('/notes', (req, res)=> {
+    Note.find().populate('category')
+    .then((notes)=> {
+        res.json(notes)
+    })
+    .catch((error)=> {
+        res.json(error)
+    })
+})
+
+app.get('/notes/:id', (req, res)=> {
+    const id=req.params.id
+    Note.findById(id).populate('category')
+    .then((note)=> {
+        res.json(note)
+    })
+    .catch((error)=> {
+        res.json(error)
+    })
+})
+
+app.put('/notes/:id', (req, res)=> {
+    const id = req.params.id
+    const body =req.body
+    Note.findByIdAndUpdate(id, body, {new: true, runValidators: true})
+    .then((note)=> {
+        if(note) {
+            res.json(note)
+        } else {
+            res.json({})
+        }
+        
+    })
+    .catch((error)=> {
+        res.json(error)
+    })
+})
+
+app.delete('/notes/:id', (req, res)=> {
+    const id=req.params.id
+    Note.findByIdAndDelete(id)
+    .then((note)=> {
+        if(note) {
+            res.json(note)
+        } else {
+            res.json({})
+        }
+    })
+    .catch((error)=> {
+        res.json(error)
+    })
+})
+
+// create a schema for category-name
+// create a model called category
+
+// add api's to perform CRUD operation on a category
+
+//GET /categories
+
+app.get('/categories', (req, res)=>{
+    Category.find()
+    .then((categories)=> {
+        res.json(categories)
+    })
+    .catch((error)=> {
+        res.json(error)
+    })
+})
+
+//POST /categories
+app.post('/categories', (req, res)=> {
+    const body=req.body
+    const category=new Category(body)
+    category.save()
+    .then((category)=> {
+        if(category) {
+            res.json(category)
+        } else {
+            res.json({})
+        }
+    })
+    .catch((error)=> {
+        res.json(error)
+    })
+})
+// GET /categories:id
+app.get('/categories/:id', (req, res)=> {
+    const id=req.params.id
+    Promise.all([Category.findById(id), Note.find({category:id})])
+    .then((values)=> {
+        const [category, notes] = values
+        res.json({
+            category,
+            notes
+        })
+    })
+    .catch((error)=> {
+        res.json(error)
+    })
+    
+})
+//PUT /categories/:id
+app.put('/categories/:id', (req, res)=> {
+    const id=req.params.id
+    const body=req.body
+    Category.findByIdAndUpdate(id, body, {new: true, runValidators: true})
+    .then((category)=> {
+        if(category) {
+            res.json(category)
+        } else {
+            res.json({})
+        }
+        
+    })
+    .catch((error)=> {
+        res.json(error)
+    })
+})
+//Delete /categories/:id
+app.delete('/categories/:id', (req, res)=> {
+    const id=req.params.id
+    Category.findByIdAndDelete(id)
+    .then((category)=> {
+        if(category) {
+            res.json(category)
+        } else {
+            res.json({})
+        }
+    })
+    .catch((error)=> {
+        res.json(error)
+    })
+})
+
+
+app.listen(PORT, ()=> {
+    console.log('Listening on port', PORT)
+})
